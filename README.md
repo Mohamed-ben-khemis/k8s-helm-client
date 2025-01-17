@@ -15,7 +15,7 @@ A Helm chart to deploy a client (frontend) application on Kubernetes.
 - [Helm 3.x](https://helm.sh/docs/intro/install/)
 - (Optional) [cert-manager](https://cert-manager.io/docs/) if you want automatic TLS certificates
 
-## Quick Start
+## Quick Start 🚀
 
 1. **Clone the Repo**
 
@@ -33,24 +33,24 @@ A Helm chart to deploy a client (frontend) application on Kubernetes.
       --set clientApp.image.repository.dev="your-image" \
       --set clientApp.image.tag="your-tag" \
     ```
-    # Quick Start 🚀
 
-If you want to try it fast, use the following command:
 
-```bash
-helm install my-frontend . \
-  --set env=dev \
-  --set clientApp.image.repository.dev="nginxdemos/hello" \
-  --set clientApp.image.tag="latest" \
-  --set service.port=80 \
-  --set service.targetPort=80
-```
-Forward Your Client App Service
-To forward the client app service to your local machine, use:
-```bash
-kubectl port-forward svc/client-app-service 3000:80
-```
-The application will then be accessible at http://localhost:3000.
+      If you want to try it fast, use the following command:
+      
+      ```bash
+        helm install my-frontend . \
+        --set env=dev \
+        --set clientApp.image.repository.dev="nginxdemos/hello" \
+        --set clientApp.image.tag="latest" \
+        --set service.port=80 \
+        --set service.targetPort=80
+      ```
+      Forward Your Client App Service
+      To forward the client app service to your local machine, use:
+      ```bash
+      kubectl port-forward svc/client-app-service 3000:80
+      ```
+      The application will then be accessible at http://localhost:3000.
 
 3. **Verify the Deployment**
 
@@ -61,7 +61,7 @@ The application will then be accessible at http://localhost:3000.
     ```
 
     - **Pods**: Check that the client application containers are running.
-    - **Service**: By default, it’s a ClusterIP service on port 3000.
+    - **Service**: By default, it’s a ClusterIP service on port 3000(target port 80).
     - **Ingress**: If enabled, ensure your hostnames and TLS certificates (if using cert-manager) are correctly configured.
 
 ## Configuration
@@ -120,11 +120,16 @@ For more details, check the [values.yaml](./values.yaml) file in this repository
 3. Submit a pull request explaining your changes.  
 
 All contributions are welcome and appreciated!
+---
+
+## ❤️ Support
+
+If you've found this project useful and would like to support its ongoing development, you can donate via [Buy Me a Coffee](https://buymeacoffee.com/mohamed.ben.khemis):
+
+[![Buy Me A Coffee](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://buymeacoffee.com/mohamed.ben.khemis)
+
+Your support is greatly appreciated! ☕️❤️
 
 ## License
 
 This project is licensed under the [MIT License](./LICENSE). See the LICENSE file for details.
-
----
-
-**Happy Deploying!** If this chart saves you time or simplifies your Kubernetes workflows, please consider giving it a star on GitHub and sharing it with your DevOps friends.
