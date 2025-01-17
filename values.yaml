@@ -1,0 +1,91 @@
+# Default values for clientApp.
+env: dev
+# nameOverride -- A name override for resources created by the chart.
+nameOverride: ""
+# fullnameOverride -- A full name override for resources created by the chart.
+fullnameOverride: ""
+
+clientApp:
+  # clientApp.spec.clientApp.image -- The image to use for clientApp pods.
+  # @default -- `image::${VERSION}`
+  image:
+    repository:
+      dev: "image:${VERSION}"
+      staging: "image:${VERSION}"
+      prod: "image:${VERSION}"
+    # clientApp.image.tag -- The tag for the clientApp image. Defaults to the chart version.
+    tag: 'your-tag'
+
+  # clientApp.spec.clientApp.replicas -- The number of clientApp replicas to run.
+  replicas:
+    dev: 1
+    staging: 1
+    prod: 2
+  # clientApp.imagePullSecrets -- Image pull secrets for the clientApp pod.
+  imagePullSecrets: []
+  # clientApp.podSecurityContext -- The `PodSecurityContext` for the clientApp pod.
+  podSecurityContext: {}
+  # clientApp.securityContext -- The container security context for the clientApp pod.
+  securityContext: {}
+  # clientApp.resources -- Resource limits for the clientApp pod.
+  resources: {}
+  # clientApp.nodeSelector -- Node selectors for the clientApp pod.
+  nodeSelector: {}
+  # clientApp.tolerations -- Node tolerations for the clientApp pod.
+  tolerations: []
+  # clientApp.affinity -- Node affinity for the clientApp pod.
+  affinity: {}
+
+#pass env variables to the container
+configMap:
+  enabled: true
+  data:
+    dev:
+    #dev env variables here...
+    staging:
+    #staging env variables here...
+    prod:
+    #prod env variables here... 
+secret:
+  enabled: false
+  data: {}
+# Configuration for the Kubernetes service.
+service:
+  type: ClusterIP
+  port: 3000
+  targetPort: 80
+# Configuration for autoscaling.
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+# Configuration for Pod Disruption Budget.
+podDisruptionBudget:
+  enabled: false
+  maxUnavailable: 1
+# Resource requests and limits for the clientApp pods.
+resources:
+  requests:
+    cpu: 100m
+    memory: 250Mi
+  limits:
+    cpu: 200m
+    memory: 500Mi
+# Configuration for Ingress, which manages external access to the services.
+ingress:
+  enabled:
+    dev: false
+    staging: true
+    prod: true
+  hostname:
+    dev: dev.domain.com
+    staging: staging.domain.com
+    prod: domain.com
+  path: /
+  pathType: Prefix
+  ingressClassName: nginx
+  tls: true
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  labels: {}

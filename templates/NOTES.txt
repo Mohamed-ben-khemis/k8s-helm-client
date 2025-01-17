@@ -1,0 +1,25 @@
+################################################################################
+#                     client Application
+################################################################################
+
+To access the client page, you have two options:
+
+Option 1: Using kubectl port-forward (for development and testing purposes):
+
+1. Run the following command to forward local port 3000 to the client page service:
+
+Command:
+    ===>  kubectl port-forward svc/client-page-service 3000:3000
+  
+Open your web browser and go to http://localhost:3000 to access the client page.
+
+Option 2: Using Ingress:
+
+Get the domain for your client page:
+Command:
+    ===> kubectl get ingress client-page
+
+Once you have the domain, you can access the client page in your web browser using the obtained domain.
+
+To uninstall the chart, run the following command:
+$ helm uninstall client-page

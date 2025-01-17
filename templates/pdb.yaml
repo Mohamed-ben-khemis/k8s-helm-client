@@ -1,0 +1,16 @@
+{{- $replicaInt := index $.Values.clientApp.replicas $.Values.env | int }}
+{{- if ge $replicaInt 2 }}
+{{- if .Values.podDisruptionBudget.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "clientApp.fullname" . }}
+  labels:
+      {{- include "clientApp.labels" . | nindent 4 }}
+spec:
+  maxUnavailable: {{ .Values.podDisruptionBudget.maxUnavailable }}
+  selector:
+    matchLabels:
+      {{- include "clientApp.selectorLabels" . | nindent 6 }}
+{{- end }}
+{{- end }}

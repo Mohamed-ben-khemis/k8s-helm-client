@@ -1,0 +1,48 @@
+{{- $client_repo := index $.Values.clientApp.image.repository $.Values.env }}
+{{- if not $client_repo }}{{ fail (printf "client_repo info required: %s" $.Values.env) }}{{ end -}}
+{{- $client_replicas := index $.Values.clientApp.replicas $.Values.env }}
+{{- if not $client_replicas }}{{ fail (printf "client_replicas info required: %s" $.Values.env) }}{{ end -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    {{- include "clientApp.labels" . | nindent 4 }}
+  name: {{ include "clientApp.fullname" . }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ $client_replicas }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "clientApp.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "clientApp.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ $client_repo }}:{{ default .Chart.AppVersion .Values.clientApp.image.tag }}
+          ports:
+            - containerPort: 3000
+          {{- if .Values.livenessProbe }}
+          livenessProbe:
+          {{- toYaml .Values.livenessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.readinessProbe }}
+          readinessProbe:
+          {{- toYaml .Values.readinessProbe | nindent 12 }}
+          {{- end }}
+          {{- if or .Values.configMap.enabled .Values.secret.enabled }}
+          envFrom:
+            {{- if .Values.configMap.enabled }}
+            - configMapRef:
+                name: {{ include "clientApp.fullname" . }}
+            {{- end }}
+            {{- if .Values.secret.enabled }}
+            - secretRef:
+                name: {{ include "clientApp.fullname" . }}
+            {{- end }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
